@@ -97,7 +97,7 @@ public class Reserva {
         this.pasajero = pasajero;
     }
 
-    public Pasajero getAcompañante() {
+    public Pasajero getAcompaniante() {
         return acompaniante;
     }
 

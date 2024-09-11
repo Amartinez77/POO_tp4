@@ -14,21 +14,31 @@ public class Agencia {
     }
 
     // Método para registrar una reserva sin acompañante
-    public void registrarReservaSinAcompañante(String origen, String destino, String fechaSalida, 
+    public void registrarReservaSinAcompaniante(String origen, String destino, String fechaSalida, 
                                                String fechaRegreso, ClaseReserva clase, 
                                                Pasajero pasajero) {
-        Reserva reserva = new Reserva(origen, destino, fechaSalida, fechaRegreso, clase, pasajero);
-        reservas.add(reserva);
-        System.out.println("Reserva registrada: " + reserva);
+        // Validar que el pasajero tenga una contraseña válida
+        if (pasajero.validarPassword()) {
+            Reserva reserva = new Reserva(origen, destino, fechaSalida, fechaRegreso, clase, pasajero);
+            reservas.add(reserva);
+            System.out.println("Reserva registrada: " + reserva);
+        } else {
+            throw new IllegalArgumentException("La contraseña del pasajero no es válida.");
+        }
     }
 
     // Método para registrar una reserva con acompañante
-    public void registrarReservaConAcompañante(String origen, String destino, String fechaSalida, 
+    public void registrarReservaConAcompaniante(String origen, String destino, String fechaSalida, 
                                                String fechaRegreso, ClaseReserva clase, 
-                                               Pasajero pasajero, Pasajero acompañante) {
-        Reserva reserva = new Reserva(origen, destino, fechaSalida, fechaRegreso, clase, pasajero, acompañante);
-        reservas.add(reserva);
-        System.out.println("Reserva registrada con acompañante: " + reserva);
+                                               Pasajero pasajero, Pasajero acompaniante) {
+        // Validar que el pasajero y el acompañante tengan contraseñas válidas (si aplica)
+        if (pasajero.validarPassword() && (acompaniante == null || acompaniante.validarPassword())) {
+            Reserva reserva = new Reserva(origen, destino, fechaSalida, fechaRegreso, clase, pasajero, acompaniante);
+            reservas.add(reserva);
+            System.out.println("Reserva registrada con acompañante: " + reserva);
+        } else {
+            throw new IllegalArgumentException("La contraseña del pasajero o acompañante no es válida.");
+        }
     }
 
     // Método para cancelar una reserva
