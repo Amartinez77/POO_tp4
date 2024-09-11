@@ -14,14 +14,15 @@ public class Agencia {
     }
 
     // Método para registrar una reserva sin acompañante
-    public void registrarReservaSinAcompaniante(String origen, String destino, String fechaSalida, 
+    public Reserva registrarReservaSinAcompaniante(String origen, String destino, String fechaSalida, 
                                                String fechaRegreso, ClaseReserva clase, 
                                                Pasajero pasajero) {
         // Validar que el pasajero tenga una contraseña válida
         if (pasajero.validarPassword()) {
+        	
             Reserva reserva = new Reserva(origen, destino, fechaSalida, fechaRegreso, clase, pasajero);
             reservas.add(reserva);
-            System.out.println("Reserva registrada: " + reserva);
+            return reserva;
         } else {
             throw new IllegalArgumentException("La contraseña del pasajero no es válida.");
         }
@@ -31,30 +32,39 @@ public class Agencia {
     public void registrarReservaConAcompaniante(String origen, String destino, String fechaSalida, 
                                                String fechaRegreso, ClaseReserva clase, 
                                                Pasajero pasajero, Pasajero acompaniante) {
-        // Validar que el pasajero y el acompañante tengan contraseñas válidas (si aplica)
-        if (pasajero.validarPassword() && (acompaniante == null || acompaniante.validarPassword())) {
-            Reserva reserva = new Reserva(origen, destino, fechaSalida, fechaRegreso, clase, pasajero, acompaniante);
-            reservas.add(reserva);
-            System.out.println("Reserva registrada con acompañante: " + reserva);
-        } else {
-            throw new IllegalArgumentException("La contraseña del pasajero o acompañante no es válida.");
+        // Validar que el pasajero tenga una contraseña válida
+        if (!pasajero.validarPassword()) {
+            throw new IllegalArgumentException("La contraseña del pasajero no es válida.");
         }
+        
+        
+        // Registrar la reserva
+        Reserva reserva = new Reserva(origen, destino, fechaSalida, fechaRegreso, clase, pasajero, acompaniante);
+        reservas.add(reserva);
+       
     }
 
-    // Método para cancelar una reserva
+    /**
+     * Cancela una reserva.
+     * 
+     * @param reserva La reserva a cancelar.
+     */
     public void cancelarReserva(Reserva reserva) {
         reserva.cancelarReserva();
     }
-
-    // Método para obtener reservas por clase
+    
+    
+    /**
+     * Obtiene las reservas por clase.
+     * 
+     * @param clase La clase de la reserva (ECONOMY, BUSINESS).
+     * @return Una lista de reservas que coinciden con la clase proporcionada.
+     */
     public List<Reserva> obtenerReservasPorClase(ClaseReserva clase) {
         return reservas.stream()
                        .filter(reserva -> reserva.getClase() == clase)
                        .collect(Collectors.toList());
     }
 
-    // Método para mostrar todas las reservas
-    public void mostrarReservas() {
-        reservas.forEach(reserva -> System.out.println(reserva));
-    }
+    
 }
